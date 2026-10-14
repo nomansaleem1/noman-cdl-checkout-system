@@ -44,8 +44,12 @@ public class Main {
             checkout.scan(item);
             int total = checkout.getTotal();
             int itemPrice = total - previousTotal;
+            int originalPrice = Checkout.samplePricingRules().get(item).calculatePrice(1);
+            String offerMessage = itemPrice < originalPrice
+                    ? " (Offer applied)"
+                    : "";
             output.println("Scanned " + item + ". Price: " + formatPrice(itemPrice)
-                    + ". Running total: " + formatPrice(total));
+                    + offerMessage + ". Running total: " + formatPrice(total));
         } catch (IllegalArgumentException exception) {
             output.println(exception.getMessage());
         }

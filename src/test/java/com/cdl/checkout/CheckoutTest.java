@@ -189,16 +189,27 @@ class CheckoutTest {
     void shouldPrintRunningAndFinalTotalsForCommandLineArguments() {
         assertEquals("Scanned B. Price: £0.30. Running total: £0.30\n"
                         + "Scanned A. Price: £0.50. Running total: £0.80\n"
-                        + "Scanned B. Price: £0.15. Running total: £0.95\n"
+                        + "Scanned B. Price: £0.15 (Offer applied). Running total: £0.95\n"
                         + "Final total: £0.95\n",
                 runCommandLine(new String[]{"B", "A", "B"}, ""));
+    }
+
+    @Test
+    void shouldKeepScanPricesAndReportRepeatedOffers() {
+        assertEquals("Scanned B. Price: £0.30. Running total: £0.30\n"
+                        + "Scanned B. Price: £0.15 (Offer applied). Running total: £0.45\n"
+                        + "Scanned B. Price: £0.30. Running total: £0.75\n"
+                        + "Scanned B. Price: £0.15 (Offer applied). Running total: £0.90\n"
+                        + "Scanned B. Price: £0.30. Running total: £1.20\n"
+                        + "Final total: £1.20\n",
+                runCommandLine(new String[]{"B", "B", "B", "B", "B"}, ""));
     }
 
     @Test
     void shouldAcceptInteractiveInputAndRecoverFromInvalidItems() {
         String output = runCommandLine(new String[0], "b A\nZ\nb\ndone\nA\n");
         assertTrue(output.contains("Unknown item: Z"));
-        assertTrue(output.contains("Scanned B. Price: £0.15. Running total: £0.95"));
+        assertTrue(output.contains("Scanned B. Price: £0.15 (Offer applied). Running total: £0.95"));
         assertTrue(output.endsWith("Final total: £0.95\n"));
     }
 

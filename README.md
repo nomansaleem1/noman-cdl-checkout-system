@@ -70,12 +70,13 @@ This prints:
 ```text
 Scanned B. Price: £0.30. Running total: £0.30
 Scanned A. Price: £0.50. Running total: £0.80
-Scanned B. Price: £0.15. Running total: £0.95
+Scanned B. Price: £0.15 (Offer applied). Running total: £0.95
 Final total: £0.95
 ```
 
 The price shown is the amount the scan adds to the total, including any offer
-discount triggered by that scan.
+discount triggered by that scan. When the scan adds less than the original unit
+price, Main displays “(Offer applied)” beside the scan price.
 ### AI assistance and personal review
 
 I used Codex to help develop the initial implementation. I then reviewed the code and made the following changes:
@@ -84,3 +85,4 @@ I used Codex to help develop the initial implementation. I then reviewed the cod
 - Replaced the stream in Checkout.getTotal() with a loop because I found it clearer for this small calculation.
 - Changed Checkout.scan() to return void. The returned map was unused, so I removed it to keep the interface focused on scanning items and reading the total.
 - Replaced the parameterized test using @CsvSource with individual tests with descriptive names, which I found easier to read and understand.
+- Implemented an update to the print of the running total after each scanned item to return the price of the item as well as if an offer has been applied.
