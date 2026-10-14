@@ -16,6 +16,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class CheckoutTest {
 
     @Test
+    void shouldReturnZeroForEmptyCheckout() {
+        Checkout checkout = new Checkout();
+        assertEquals(0, checkout.getTotal());
+    }
+
+    @Test
     void shouldCalculatePriceForOneA() {
         Checkout checkout = new Checkout();
         checkout.scan("A");
@@ -41,6 +47,25 @@ class CheckoutTest {
         Checkout checkout = new Checkout();
         checkout.scan("D");
         assertEquals(15, checkout.getTotal());
+    }
+
+    @Test
+    void shouldCalculatePriceForMultipleDifferentItems() {
+        Checkout checkout = new Checkout();
+        checkout.scan("D");
+        checkout.scan("B");
+        checkout.scan("A");
+        checkout.scan("C");
+        assertEquals(115, checkout.getTotal());
+    }
+
+    @Test
+    void shouldApplySpecialOfferForThreeAs() {
+        Checkout checkout = new Checkout();
+        checkout.scan("A");
+        checkout.scan("A");
+        checkout.scan("A");
+        assertEquals(130, checkout.getTotal());
     }
 
     @Test
@@ -86,18 +111,6 @@ class CheckoutTest {
     }
 
     @Test
-    void shouldCombineOffersWithANormallyPricedItem() {
-        Checkout checkout = new Checkout();
-        checkout.scan("A");
-        checkout.scan("A");
-        checkout.scan("A");
-        checkout.scan("B");
-        checkout.scan("B");
-        checkout.scan("D");
-        assertEquals(190, checkout.getTotal());
-    }
-
-    @Test
     void shouldApplyBothOffersWhenItemsAreMixed() {
         Checkout checkout = new Checkout();
         checkout.scan("D");
@@ -107,6 +120,28 @@ class CheckoutTest {
         checkout.scan("B");
         checkout.scan("A");
         assertEquals(190, checkout.getTotal());
+    }
+
+    @Test
+    void shouldUpdateRunningTotalAfterEachScan() {
+        Checkout checkout = new Checkout();
+        assertEquals(0, checkout.getTotal());
+        checkout.scan("A");
+        assertEquals(50, checkout.getTotal());
+        checkout.scan("B");
+        assertEquals(80, checkout.getTotal());
+        checkout.scan("A");
+        assertEquals(130, checkout.getTotal());
+        checkout.scan("A");
+        assertEquals(160, checkout.getTotal());
+        checkout.scan("B");
+        assertEquals(175, checkout.getTotal());
+        checkout.scan("A");
+        assertEquals(225, checkout.getTotal());
+        checkout.scan("A");
+        assertEquals(275, checkout.getTotal());
+        checkout.scan("A");
+        assertEquals(305, checkout.getTotal());
     }
 
     @Test
@@ -178,59 +213,5 @@ class CheckoutTest {
         Main.run(args, new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8)),
                 new PrintStream(output, true, StandardCharsets.UTF_8));
         return output.toString(StandardCharsets.UTF_8).replace("\r\n", "\n");
-    }
-
-    @Test
-    public void shouldReturnZeroForEmptyCheckout() {
-        Checkout checkout = new Checkout();
-        assertEquals(0, checkout.getTotal());
-    }
-
-    @Test
-    public void shouldCalculatePriceForSingleItem() {
-        Checkout checkout = new Checkout();
-        checkout.scan("A");
-        assertEquals(50, checkout.getTotal());
-    }
-
-    @Test
-    public void shouldCalculatePriceForMultipleDifferentItems() {
-        Checkout checkout = new Checkout();
-        checkout.scan("D");
-        checkout.scan("B");
-        checkout.scan("A");
-        checkout.scan("C");
-        assertEquals(115, checkout.getTotal());
-    }
-
-    @Test
-    public void shouldApplySpecialOfferForThreeAs() {
-        Checkout checkout = new Checkout();
-        checkout.scan("A");
-        checkout.scan("A");
-        checkout.scan("A");
-        assertEquals(130, checkout.getTotal());
-    }
-
-    @Test
-    public void shouldUpdateRunningTotalAfterEachScan() {
-        Checkout checkout = new Checkout();
-        assertEquals(0, checkout.getTotal());
-        checkout.scan("A");
-        assertEquals(50, checkout.getTotal());
-        checkout.scan("B");
-        assertEquals(80, checkout.getTotal());
-        checkout.scan("A");
-        assertEquals(130, checkout.getTotal());
-        checkout.scan("A");
-        assertEquals(160, checkout.getTotal());
-        checkout.scan("B");
-        assertEquals(175, checkout.getTotal());
-        checkout.scan("A");
-        assertEquals(225, checkout.getTotal());
-        checkout.scan("A");
-        assertEquals(275, checkout.getTotal());
-        checkout.scan("A");
-        assertEquals(305, checkout.getTotal());
     }
 }
