@@ -68,11 +68,14 @@ java -cp target/classes com.cdl.checkout.Main B A B
 This prints:
 
 ```text
-Scanned B. Running total: £0.30
-Scanned A. Running total: £0.80
-Scanned B. Running total: £0.95
+Scanned B. Price: £0.30. Running total: £0.30
+Scanned A. Price: £0.50. Running total: £0.80
+Scanned B. Price: £0.15. Running total: £0.95
 Final total: £0.95
 ```
+
+The price shown is the amount the scan adds to the total, including any offer
+discount triggered by that scan.
 ### AI assistance and personal review
 
 I used Codex to help develop the initial implementation. I then reviewed the code and made the following changes:

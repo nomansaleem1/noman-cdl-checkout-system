@@ -187,9 +187,9 @@ class CheckoutTest {
 
     @Test
     void shouldPrintRunningAndFinalTotalsForCommandLineArguments() {
-        assertEquals("Scanned B. Running total: £0.30\n"
-                        + "Scanned A. Running total: £0.80\n"
-                        + "Scanned B. Running total: £0.95\n"
+        assertEquals("Scanned B. Price: £0.30. Running total: £0.30\n"
+                        + "Scanned A. Price: £0.50. Running total: £0.80\n"
+                        + "Scanned B. Price: £0.15. Running total: £0.95\n"
                         + "Final total: £0.95\n",
                 runCommandLine(new String[]{"B", "A", "B"}, ""));
     }
@@ -198,7 +198,7 @@ class CheckoutTest {
     void shouldAcceptInteractiveInputAndRecoverFromInvalidItems() {
         String output = runCommandLine(new String[0], "b A\nZ\nb\ndone\nA\n");
         assertTrue(output.contains("Unknown item: Z"));
-        assertTrue(output.contains("Scanned B. Running total: £0.95"));
+        assertTrue(output.contains("Scanned B. Price: £0.15. Running total: £0.95"));
         assertTrue(output.endsWith("Final total: £0.95\n"));
     }
 

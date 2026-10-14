@@ -40,8 +40,12 @@ public class Main {
     private static void scan(Checkout checkout, String input, PrintStream output) {
         String item = input.toUpperCase(Locale.ROOT);
         try {
+            int previousTotal = checkout.getTotal();
             checkout.scan(item);
-            output.println("Scanned " + item + ". Running total: " + formatPrice(checkout.getTotal()));
+            int total = checkout.getTotal();
+            int itemPrice = total - previousTotal;
+            output.println("Scanned " + item + ". Price: " + formatPrice(itemPrice)
+                    + ". Running total: " + formatPrice(total));
         } catch (IllegalArgumentException exception) {
             output.println(exception.getMessage());
         }
